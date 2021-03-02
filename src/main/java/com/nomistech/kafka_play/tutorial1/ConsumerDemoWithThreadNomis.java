@@ -18,7 +18,7 @@ public class ConsumerDemoWithThreadNomis {
 
     final static String bootstrapServers = "127.0.0.1:9092";
     final static String groupId = "my-java-consumer-001-nomis";
-    final static String topic = "my-topic-002";
+    final static String topic = "demo-topic-001";
 
     public static void main(String[] args) {
         new ConsumerDemoWithThreadNomis().run();

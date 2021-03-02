@@ -31,7 +31,7 @@ public class ProducerDemoWithKeys {
 
         for (int i = 0; i < 10; i++) {
             // Create producer record
-            String topic = "my-topic-002";
+            String topic = "demo-topic-001";
             String key   = "id_" + i;
             String value = "Hello world " + i;
             final ProducerRecord<String, String> record =

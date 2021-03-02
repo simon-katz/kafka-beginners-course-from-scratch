@@ -27,7 +27,7 @@ public class ConsumerDemoWithThread {
         final Logger logger = LoggerFactory.getLogger(ConsumerDemoWithThread.class.getName());
         final String bootstrapServers = "127.0.0.1:9092";
         final String groupId = "my-java-consumer-001";
-        final String topic = "my-topic-002";
+        final String topic = "demo-topic-001";
         final CountDownLatch latch = new CountDownLatch(1);
         logger.info("Creating the consumer thread");
 

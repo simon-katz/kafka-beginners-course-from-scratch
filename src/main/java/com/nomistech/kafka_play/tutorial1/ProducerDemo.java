@@ -24,7 +24,7 @@ public class ProducerDemo {
 
         // Create producer record
         final ProducerRecord<String, String> record =
-                new ProducerRecord<String, String>("my-topic-002", "Hello world!");
+                new ProducerRecord<String, String>("demo-topic-001", "Hello world!");
 
         // Send data
         producer.send(record);

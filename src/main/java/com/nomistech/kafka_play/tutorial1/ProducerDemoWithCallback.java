@@ -31,7 +31,7 @@ public class ProducerDemoWithCallback {
         for (int i = 0; i < 10; i++) {
             // Create producer record
             final ProducerRecord<String, String> record =
-                    new ProducerRecord<String, String>("my-topic-002", "Hello world " + i);
+                    new ProducerRecord<String, String>("demo-topic-001", "Hello world " + i);
 
             // Send data
             producer.send(record, new Callback() {
