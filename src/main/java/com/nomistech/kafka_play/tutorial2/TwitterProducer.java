@@ -15,6 +15,10 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
@@ -26,23 +30,25 @@ public class TwitterProducer {
     Logger logger = LoggerFactory.getLogger(TwitterProducer.class.getName());
 
     // use your own credentials - don't share them with anyone
-    String consumerKey = "";
-    String consumerSecret = "";
-    String token = "";
-    String secret = "";
+    String consumerKey;
+    String consumerSecret;
+    String token;
+    String secret;
 
     List<String> terms = Lists.newArrayList("bitcoin", "usa", "politics", "sport", "soccer");
 
 
     public TwitterProducer(){}
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new TwitterProducer().run();
     }
 
-    public void run(){
+    public void run() throws IOException {
 
         logger.info("Setup");
+
+        setUpTwitterConfig();
 
         /* Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
         BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(1000);
@@ -88,6 +94,20 @@ public class TwitterProducer {
             }
         }
         logger.info("End of application");
+    }
+
+    void setUpTwitterConfig() throws IOException {
+        Properties config = new Properties();
+        final InputStream istream;
+        try { istream = new FileInputStream("novcs-twitter-credentials.properties");
+        } catch (FileNotFoundException e) {
+            throw e;
+        }
+        config.load(istream);
+        consumerKey    = config.getProperty("consumerKey");
+        consumerSecret = config.getProperty("consumerSecret");
+        token          = config.getProperty("token");
+        secret         = config.getProperty("secret");
     }
 
     public Client createTwitterClient(BlockingQueue<String> msgQueue){
