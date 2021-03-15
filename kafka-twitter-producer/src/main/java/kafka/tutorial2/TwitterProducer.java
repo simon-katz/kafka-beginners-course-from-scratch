@@ -1,4 +1,4 @@
-package com.nomistech.kafka_play.tutorial2;
+package kafka.tutorial2;
 
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
