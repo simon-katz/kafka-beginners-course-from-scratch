@@ -1,6 +1,7 @@
 package kafka.tutorial2;
 
 import com.google.common.collect.Lists;
+import com.google.gson.JsonParser;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Client;
 import com.twitter.hbc.core.Constants;
@@ -40,11 +41,11 @@ public class TwitterProducer {
 
     public TwitterProducer(){}
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         new TwitterProducer().run();
     }
 
-    public void run() throws IOException {
+    public void run() throws IOException, InterruptedException {
 
         logger.info("Setup");
 
@@ -82,7 +83,8 @@ public class TwitterProducer {
                 client.stop();
             }
             if (msg != null){
-                logger.info(msg);
+                String id = extractIdFromTweet(msg);
+                logger.info("Got message from Twitter: id = " + id);
                 producer.send(new ProducerRecord<>("twitter-tweets", null, msg), new Callback() {
                     @Override
                     public void onCompletion(RecordMetadata recordMetadata, Exception e) {
@@ -156,4 +158,15 @@ public class TwitterProducer {
         KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
         return producer;
     }
+
+    private static final JsonParser jsonParser = new JsonParser();
+
+    private static String extractIdFromTweet(String tweetJson){
+        // gson library
+        return jsonParser.parse(tweetJson)
+                .getAsJsonObject()
+                .get("id_str")
+                .getAsString();
+    }
+
 }
