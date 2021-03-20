@@ -141,11 +141,12 @@ public class ElasticSearchConsumer {
 
                 IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
                 logger.info(indexResponse.getId());
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                // Sleep now in `TwitterProducer`.
+                // try {
+                //     Thread.sleep(1000);
+                // } catch (InterruptedException e) {
+                //     e.printStackTrace();
+                // }
             }
         }
 

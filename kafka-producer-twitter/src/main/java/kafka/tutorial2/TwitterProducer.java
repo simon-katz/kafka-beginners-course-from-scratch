@@ -94,6 +94,7 @@ public class TwitterProducer {
                     }
                 });
             }
+            Thread.sleep(5000); // So we only produce a little data.
         }
         logger.info("End of application");
     }
