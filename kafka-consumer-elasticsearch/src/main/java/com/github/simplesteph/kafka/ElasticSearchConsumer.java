@@ -111,10 +111,16 @@ public class ElasticSearchConsumer {
 
     private static String extractIdFromTweet(String tweetJson){
         // gson library
-        return jsonParser.parse(tweetJson)
-                .getAsJsonObject()
-                .get("id_str")
-                .getAsString();
+        String id;
+        try {
+            id = jsonParser.parse(tweetJson)
+                    .getAsJsonObject()
+                    .get("id_str")
+                    .getAsString();
+        } catch (NullPointerException _) {
+            id = null;
+        }
+        return id;
     }
 
     public static void main(String[] args) throws IOException {
@@ -142,14 +148,17 @@ public class ElasticSearchConsumer {
                 //     We use this.
 
                 String id = extractIdFromTweet(record.value());
-
-                IndexRequest indexRequest = new IndexRequest(
-                        "twitter",
-                        "tweets",
-                        id // this is to make our consumer idempotent
-                ).source(record.value(), XContentType.JSON);
-
-                bulkRequest.add(indexRequest);
+                if (id == null) {
+                    logger.warn("Skipping tweet that has no id_str " + record.value());
+                }
+                else {
+                    IndexRequest indexRequest = new IndexRequest(
+                            "twitter",
+                            "tweets",
+                            id // this is to make our consumer idempotent
+                    ).source(record.value(), XContentType.JSON);
+                    bulkRequest.add(indexRequest);
+                }
             }
 
             if (recordCount > 0) {
