@@ -169,6 +169,7 @@ public class ElasticSearchConsumer {
             }
         }
 
+        // Unreachable code:
         // client.close();
     }
 }
